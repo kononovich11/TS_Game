@@ -1,0 +1,22 @@
+.field {
+  background-color: #282c34;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 20% 20% 20% ;
+  grid-template-rows: 20% 20% 20% 20%;
+  padding: 5vw;
+}
+
+.team1 {
+  margin-bottom: 5vh;
+}
+
+.team1, .team2 {
+  border: 2px solid pink;
+  height: 35vh;
+}
+
+.row {
+  border: 2px solid green;
+  margin-bottom: 2vh;
+}

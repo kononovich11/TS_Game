@@ -1,0 +1,12 @@
+.card {
+  width: 10vw;
+  height: 15vh;
+  border: 3px solid green;
+  color: #fff;
+  /* pointer-events: none; */
+}
+
+.disabled {
+  border: 1px solid red;
+  pointer-events: none;
+}
