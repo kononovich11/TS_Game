@@ -1,25 +1,26 @@
 class Attack {
-  constructor(currentUnitIndex: any, opponentUnitIndex: any, arrUnitCurrent: any) {
-    this.currentUnitIndex = currentUnitIndex;
-    this.opponentUnitIndex = opponentUnitIndex;
-    this.arrUnitCurrent = arrUnitCurrent;
-  }
-  currentUnitIndex: any;
-  opponentUnitIndex: any;
-  type: string = 'range';
-  arrUnitCurrent: any;
+  currentCard: any;
+  opponentCard: any;
+  renderUnits: any;
+  defend: any;
+  activeTeam: number;
 
-  endMove() {
-    console.log('END_MOVE');
+  constructor(currentCard: any, opponentCard: any, renderUnits: any, defend: any, activeTeam: number) {
+    this.currentCard = currentCard;
+    this.opponentCard = opponentCard;
+    this.renderUnits = renderUnits;
+    this.defend = defend;
+    this.activeTeam = activeTeam;
   }
 
-  attack() {
-    // console.log(this.currentUnitIndex, this.opponentUnitIndex, this.arrUnitCurrent);
-    const currentUnit = this.arrUnitCurrent.find((item: any, index: number) => index === this.currentUnitIndex);
-    const opponentUnit = this.arrUnitCurrent.find((item: any, index: number) => index === this.opponentUnitIndex);
-    currentUnit.realizeStrategy(opponentUnit);
-    this.endMove();
+  startAttack() {
+    const realization = this.currentCard.__proto__.prototype.realizeStrategy(this.currentCard, this.opponentCard, this.renderUnits, this.defend?.flag, this.activeTeam); //???????
+    if (this.defend !== undefined) {
+      this.defend.flag = false;
+    }
+    return realization;
   }
 }
+
 
 export default Attack;

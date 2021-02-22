@@ -1,4 +1,5 @@
 import FabricaUnits from './classes/factory/factory';
+import CommonUnit from './classes/units/commonUnit';
 
 
 const Initialization: any = (): any  => {
@@ -15,7 +16,7 @@ const Initialization: any = (): any  => {
   const bishop = fabrica.create('bishop');
   const sirena = fabrica.create('sirena');
 
-  const arrUnits: object[] = [
+  let arrUnits: object[] = [
     skeleton!,
     centaur!,
     bandit!,
@@ -27,11 +28,17 @@ const Initialization: any = (): any  => {
     sirena!,
   ];
 
-  let renderUnits: number[] = [];
+  let renderUnits: any[] = [];
   const generateUnits = (arrUnits: any): any => {
+
     for (let i = 0; i < 12; i++) {
-      const randomUnit: number = Math.round(+Math.random().toFixed(1) * 8);
-      renderUnits.push(arrUnits[randomUnit]);
+      const randomUnit: number = 2;  //number = Math.round(+Math.random().toFixed(1) * 8);
+
+      let copyObj = JSON.parse(JSON.stringify(arrUnits[randomUnit]));
+      copyObj.__proto__ = CommonUnit;
+      copyObj.id = i;
+
+      renderUnits.push(copyObj);
     }
     return renderUnits;
   }

@@ -1,32 +1,49 @@
 
+// const initialState = {
+//   currentCard: null,
+//   opponentCard: null,
+// }
+
+
+// interface IAppState {
+//   opponentCard: any[];
+// }
+
 const initialState: any = {
   renderUnits: null,
   currentCard: null,
   opponentCard: null,
-  teamActive: 1,
+  activeTeam: 1,
+  gameDispatch: null,
 };
 
 
+
 export const reducer = (state = initialState, action: any) => {
-  // console.log(state);
   switch(action.type) {
-    case 'CURRENT_CARD':
-      console.log(action);
+    case 'GAME_START':
       return {
         ...state,
-        currentCard: action.currentIndex
+        game: action.gameDispatch
     };
-    case 'CHOOSED_CARD':
-      console.log(action);
+    case 'CURRENT_CARD':
       return {
         ...state,
-        opponentCard: action.index
+        currentCard: action.dataCurentCard
     };
     case 'LOADED_UNITS':
       return {
         ...state,
         renderUnits: action.renderUnits
     };
+
+    case 'CHOOSE_DEFEND':
+      return {
+        ...state,
+        defend: action.defend
+    };
+
     default : return state;
   }
 }
+

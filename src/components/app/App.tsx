@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import Field from '../field/field';
-import Fight from '../../oop/fight/fight';
 
 function App() {
   const startGame = () => {

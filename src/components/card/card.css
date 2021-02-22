@@ -1,12 +1,20 @@
 .card {
   width: 10vw;
   height: 15vh;
-  border: 3px solid green;
+  border: 3px solid red;
   color: #fff;
   /* pointer-events: none; */
 }
 
-.disabled {
-  border: 1px solid red;
-  pointer-events: none;
+.active {
+  border: 1px solid green;
+  /* pointer-events: none; */
+}
+
+.danger {
+  background-color:blue;
+}
+
+.dead {
+  background-color: purple;
 }

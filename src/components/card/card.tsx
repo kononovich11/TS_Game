@@ -1,64 +1,66 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './card.css';
 import { useDispatch, useSelector } from 'react-redux';
 import Attack from '../../oop/gameMove/attack/attack';
-import Initialization from '../../oop/initialization';
+import RootState from '../../oop/interfeces/IRootState';
 
 
 interface CardI {
   data: any;
   index: number,
-  // name: string
+  className: any,
+  needRenderCurrentCardWindow: boolean,
+  setNeedRenderCurrentCardWindow: any,
+  setNeedRenderOpponentCardWindow: any,
+  needRenderOpponentCardWindow: any,
+  setEndMove: any,
+  moreClass: string,
 }
 
 
-const Card = ({data, index}: CardI) : any=> {
-  let className: string = 'card';
-  const [currentIndex, setCurrentIndex] = useState(1);
+const Card = (
+  {
+    data,
+    index,
+    className,
+    needRenderCurrentCardWindow,
+    setNeedRenderCurrentCardWindow,
+    setNeedRenderOpponentCardWindow,
+    needRenderOpponentCardWindow,
+    setEndMove,
+    moreClass
+  }: CardI) : any=> {
 
   const dispatch = useDispatch();
-
-  interface RootState {
-    opponentCard: any,
-    currentCard: any,
-    renderUnits: any[],
-    teamActive: number,
-  }
-
-  const renderUnits = useSelector((state: RootState) => state.renderUnits);
-  const opponentCard = useSelector((state: RootState) => state.opponentCard);
   const currentCard = useSelector((state: RootState) => state.currentCard);
-  const teamActive = useSelector((state: RootState) => state.teamActive);
-
+  const renderUnits = useSelector((state: RootState) => state.renderUnits);
+  const defend = useSelector((state: RootState) => state.defend);
+  const game = useSelector((state: RootState) => state.game);
   let {name, type, health, damage, initiative, heal} = data;
 
 
-  if(teamActive === 1 && index < 6) {
-    className += ' disabled';
-    // console.log(console.log(data))
-  }
-
   const currentUnitHandler = (current: any) => {
-    console.log(current.target.value);
-    const currentIndex = +current.target.value;
-    dispatch({type: 'CURRENT_CARD', currentIndex});
-    //setCurrentIndex(current.target.value);
+    const dataCurentCard = renderUnits.find((item: any) => item.id === +current.target.value);
+    dispatch({type: 'CURRENT_CARD', dataCurentCard});
+    setNeedRenderCurrentCardWindow(false);
+    setNeedRenderOpponentCardWindow(true);
+
   }
 
-  const clickCardHandler = (card: any) => {
-    //const opponentCard = [...card.target.children];
-    console.log('CURRENT', currentCard);
-    console.log('OPPONENT', index);
-    dispatch({type: 'CHOOSED_CARD', index}); //need create action dispatch({type: 'CHOOSED_CARD', opponentCard});
-    console.log(opponentCard);
-    const attackAction = new Attack(currentCard, index, renderUnits);
-    attackAction.attack();
+  const opponentUnitHandler = (opponent: any) => {
+    const dataOpponentCard = renderUnits.find((item:any) => item.id === +opponent.target.value);
+    const attackAction = new Attack(currentCard, dataOpponentCard, renderUnits, defend, game.activeTeam);
+    attackAction.startAttack();
+    game.round += 1;
+    game.activeTeam = game.activeTeam === 1? 2 : 1;
+    game.dataCurrentTeam = game.activeTeam === 1? game.firstTeam :game.secondTeam;
+    setNeedRenderOpponentCardWindow(false);
+    setEndMove(true);
   }
-
 
   return (
-    <div className = "container">
-    <div className={className} onClick={(e) => clickCardHandler(e)}>
+    <div className = {moreClass? moreClass : className}>
+    <div>
       <h3>{name}</h3>
       <p>{'type - ' + type}</p>
       <p>{'health - ' + health}</p>
@@ -66,7 +68,8 @@ const Card = ({data, index}: CardI) : any=> {
       {damage && <p>{'damage - ' + damage}</p>}
       {heal && <p>{'heal - ' + heal}</p>}
     </div>
-    <button value = {index} onClick={(e) => currentUnitHandler(e)}>Choose me!</button>
+    {className === 'active' && needRenderCurrentCardWindow && <button value = {index} onClick={(e) => currentUnitHandler(e)}>Choose me!</button>}
+    {className === 'card' && needRenderOpponentCardWindow && <button value = {index} onClick={(e) => opponentUnitHandler(e)}>Attack me!</button>}
     </div>
   );
 
